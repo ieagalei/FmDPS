@@ -74,7 +74,6 @@
   <div style="margin-top:12px;">
     <button onclick="calculate()">Calculate DPS</button>
     <div id="result">Results will appear here.</div>
-match your game's mechanics.</div>
   </div>
 
   <div class="nav" style="margin-top:20px;">
@@ -113,6 +112,7 @@ match your game's mechanics.</div>
       dbl = Math.max(0, Math.min(1, dbl));
       dbl = 1 + dbl;
 
+      crit = Math.max(0, Math.min(1, crit));
       crit = 1 + (crit * critdmg);
 
       const denom = Math.floor(17 / (1 + spd));
