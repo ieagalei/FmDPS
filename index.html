@@ -70,23 +70,22 @@
           <tr><th>Attack Speed</th><th>  Time (s)</th></tr>
         </thead>
         <tbody>
-          <tr><td>&lt; 6.3%</td><td>1.7</td></tr>
-          <tr><td>&lt; 13.4%</td><td>1.6</td></tr>
-          <tr><td>&lt; 21.5%</td><td>1.5</td></tr>
-          <tr><td>&lt; 30.8%</td><td>1.4</td></tr>
-          <tr><td>&lt; 41.7%</td><td>1.3</td></tr>
-          <tr><td>&lt; 54.6%</td><td>1.2</td></tr>
-          <tr><td>&lt; 70.0%</td><td>1.1</td></tr>
-          <tr><td>&lt; 88.9%</td><td>1.0</td></tr>
-          <tr><td>&lt; 112.5%</td><td>0.9</td></tr>
-          <tr><td>&lt; 142.9%</td><td>0.8</td></tr>
-          <tr><td>&lt; 183.4%</td><td>0.7</td></tr>
-          <tr><td>&lt; 240.0%</td><td>0.6</td></tr>
-          <tr><td>&lt; 325.0%</td><td>0.5</td></tr>
-          <tr><td>&lt; 466.7%</td><td>0.4</td></tr>
-          <tr><td>&gt; 466.7%</td><td>0.3</td></tr>
+          <tr><td>&lt; 7.1%</td><td>1.7</td></tr>
+          <tr><td>&lt; 15.4%</td><td>1.6</td></tr>
+          <tr><td>&lt; 25.0%</td><td>1.5</td></tr>
+          <tr><td>&lt; 36.4%</td><td>1.4</td></tr>
+          <tr><td>&lt; 50.0%</td><td>1.3</td></tr>
+          <tr><td>&lt; 66.7%</td><td>1.2</td></tr>
+          <tr><td>&lt; 87.5%</td><td>1.1</td></tr>
+          <tr><td>&lt; 114%</td><td>1.0</td></tr>
+          <tr><td>&lt; 150%</td><td>0.9</td></tr>
+          <tr><td>&lt; 200%</td><td>0.8</td></tr>
+          <tr><td>&lt; 275%</td><td>0.7</td></tr>
+          <tr><td>&lt; 400%</td><td>0.6</td></tr>
+          <tr><td>&gt; 400%</td><td>0.5</td></tr>
         </tbody>
       </table>
+      <div>Please note different weapons have different offsets and rounding so the example can only be used as a rough guide.</div>
     </div>
     <div class="column" id="inputs">
       <h2 style="margin:6px 0">Inputs</h2>
@@ -145,7 +144,7 @@
       crit = Math.max(0, Math.min(1, crit));
       crit = 1 + (crit * critdmg);
 
-      const denom = Math.ceil(17 / (1 + spd));
+      const denom = Math.round(1.5 + (15 / (1 + spd)));
       spd = (denom <= 0) ? 0 : 10 / denom;
 
       return { dmg: dmg * dbl * crit * spd, spd, dbl, crit };
