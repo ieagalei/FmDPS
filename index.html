@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{
-      --accent: #2563eb;
-      --muted: #6b7280;
-      --bg: #0f172a;
-      --panel: #175920;
-      --text: #ffffff;
-      --good-bg: #e7f2ff;
-      --bad-bg: #fff0f0;
+      --accent: #26e;
+      --muted: #678;
+      --bg: #012;
+      --panel: #162;
+      --text: #fff;
+      --good-bg: #eff;
+      --bad-bg: #fee;
     }
     body { font-family: Arial, sans-serif; padding: 20px; background: #040404; color: var(--text); }
     h2 { margin-top: 10px; }
@@ -82,7 +82,7 @@
           <tr><td>&lt; 200%</td><td>0.8</td></tr>
           <tr><td>&lt; 275%</td><td>0.7</td></tr>
           <tr><td>&lt; 400%</td><td>0.6</td></tr>
-          <tr><td>&gt; 400%</td><td>0.5</td></tr>
+          <tr><td>&gt; 400%</td><td>0.3</td></tr>
         </tbody>
       </table>
       <div>Please note different weapons have different offsets and rounding so the example can only be used as a rough guide.</div>
@@ -97,19 +97,21 @@
         <label><input type="number" id="e1_critdmg" value="0" step="any"/> Crit Damage (%)</label>
       </div>
       <div class="stats" id="input_stats"></div>
+      <div style="margin-top:12px;">
+        <button onclick="calculate()">Calculate DPS</button>
+        <div id="result">Results will appear here.</div>
+      </div>
+      <div class="nav" style="margin-top:20px;">
+        <a href="https://discord.gg/fmaster" class="card" target="_blank" rel="noopener noreferrer">
+          <div class="icon">🔨</div>
+          <div>Discord Link</div>
+        </a>
+        <a href="forge.html" class="card">
+          <div class="icon">🛠️</div>
+          <div>Forge Maths</div>
+        </a>      
+      </div>
     </div>
-  </div>
-
-  <div style="margin-top:12px;">
-    <button onclick="calculate()">Calculate DPS</button>
-    <div id="result">Results will appear here.</div>
-  </div>
-
-  <div class="nav" style="margin-top:20px;">
-    <a href="https://discord.gg/fmaster" class="card" target="_blank" rel="noopener noreferrer">
-      <div class="icon">🔨</div>
-      <div>Discord Link</div>
-    </a>
   </div>
 
   <script>
@@ -144,7 +146,7 @@
       crit = Math.max(0, Math.min(1, crit));
       crit = 1 + (crit * critdmg);
 
-      const denom = Math.round(1.5 + (15 / (1 + spd)));
+      const denom = Math.round(15 / (1 + spd));
       spd = (denom <= 0) ? 0 : 10 / denom;
 
       return { dmg: dmg * dbl * crit * spd, spd, dbl, crit };
