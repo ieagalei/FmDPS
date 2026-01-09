@@ -70,19 +70,20 @@
           <tr><th>Attack Speed</th><th>  Time (s)</th></tr>
         </thead>
         <tbody>
-          <tr><td>&lt; 7.1%</td><td>1.7</td></tr>
-          <tr><td>&lt; 15.4%</td><td>1.6</td></tr>
-          <tr><td>&lt; 25.0%</td><td>1.5</td></tr>
-          <tr><td>&lt; 36.4%</td><td>1.4</td></tr>
-          <tr><td>&lt; 50.0%</td><td>1.3</td></tr>
-          <tr><td>&lt; 66.7%</td><td>1.2</td></tr>
-          <tr><td>&lt; 87.5%</td><td>1.1</td></tr>
-          <tr><td>&lt; 114%</td><td>1.0</td></tr>
-          <tr><td>&lt; 150%</td><td>0.9</td></tr>
-          <tr><td>&lt; 200%</td><td>0.8</td></tr>
-          <tr><td>&lt; 275%</td><td>0.7</td></tr>
-          <tr><td>&lt; 400%</td><td>0.6</td></tr>
-          <tr><td>&gt; 400%</td><td>0.3</td></tr>
+          <tr><td>= 0%</td><td>1.7</td></tr>
+          <tr><td>&lt; 7.1%</td><td>1.6</td></tr>
+          <tr><td>&lt; 15.4%</td><td>1.5</td></tr>
+          <tr><td>&lt;= 25.0%</td><td>1.4</td></tr>
+          <tr><td>&lt; 36.4%</td><td>1.3</td></tr>
+          <tr><td>&lt;= 50.0%</td><td>1.2</td></tr>
+          <tr><td>&lt; 66.7%</td><td>1.1</td></tr>
+          <tr><td>&lt;= 87.5%</td><td>1.0</td></tr>
+          <tr><td>&lt; 114%</td><td>0.9</td></tr>
+          <tr><td>&lt;= 150%</td><td>0.8</td></tr>
+          <tr><td>&lt;= 200%</td><td>0.7</td></tr>
+          <tr><td>&lt;= 275%</td><td>0.6</td></tr>
+          <tr><td>&lt;= 400%</td><td>0.5</td></tr>
+          <tr><td>&gt; 400%</td><td>0.4</td></tr>
         </tbody>
       </table>
       <div>Please note different weapons have different offsets and rounding so the example can only be used as a rough guide. Also double chance adds on the delay.</div>
@@ -150,7 +151,7 @@
       crit = Math.max(0, Math.min(1, crit));
       crit = 1 + (crit * critdmg);
 
-      const denom = Math.round(15 / (1 + spd));
+      const denom = Math.round((15 / (1 + spd)) + 1.5);
       spd = (denom <= 0) ? 0 : 10 / denom;
 
       return { dmg: dmg * dbl * crit * spd, spd, dbl, crit };
