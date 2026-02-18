@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FM Build</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --accent: #26e;
+      --muted: #678;
+      --bg: #012;
+      --panel: #162;
+      --text: #fff;
+      --good-bg: #eff;
+      --bad-bg: #fee;
+    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #040404; color: var(--text); }
+    h2 { margin-top: 10px; }
+    label { display: block; margin: 6px 0 2px; }
+    input[type="number"] { width: 120px; margin-bottom: 8px; }
+    button { margin-top: 12px; padding: 8px 14px; }
+    #result { margin-top: 18px; font-weight: 600; white-space: pre-wrap; background:#222; padding:12px; border-radius:8px; border:1px solid #363e18; }
+    .stats { margin-top: 8px; font-style: italic; color:var(--muted) }
+    .nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 0 auto 12px;
+      padding: 8px 0;
+    }
+    .card {
+      display: inline-block;
+      text-decoration: none; /* remove underline */
+      color: inherit;        /* keep text color */
+      background: var(--panel);
+      border: 1px solid #dfe6f6;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      font-weight: 600;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .card:hover {
+      background: var(--accent);
+      color: #081326;
+      transform: translateY(-4px);
+    }
+    .small-note { font-size:0.9rem; color:var(--muted); margin-top:8px; }
+    .grid-row { display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
+    .column { min-width:200px; }
+    .simple-table th, .simple-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f0f6ff;
+      color: var(--text);
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>👷 Forge Master Builds - by Kayzee</h1>
+  <h2 style="font-weight:normal">Instructions</h2>
+  <h3>1. Select Build type</h3>
+  <h3>2. Select Substat %</h3>
+  <h3>Please keep in mind the recommended build is Early Regen and Late DPS (range)</h4>
+
+  <div>Early Game Builds</div>
+  <div style="margin-bottom:12px;">
+    <button onclick="build(0)">Early Regen</button>
+    <button onclick="build(1)">Early DPS</button>
+    <button onclick="build(2)">Early Melee</button>
+  </div>
+  <div>Late Game Builds</div>
+  <div style="margin-bottom:12px;">
+    <button onclick="build(3)">Late DPS</button>
+    <button onclick="build(4)">Late Melee</button>
+    <button onclick="build(5)">Late Regen Block</button>
+    <button onclick="build(6)">Late Regen Skill</button>
+  </div>
+  <div>Substat Quality</div>
+  <div style="margin-bottom:12px;">
+    <button onclick="substat(50)">50% Substats</button>
+    <button onclick="substat(70)">70% Substats</button>
+    <button onclick="substat(85)">85% Substats</button>
+    <button onclick="substat(95)">95% Substats</button>
+    <button onclick="substat(100)">100% Substats</button>
+  </div>
+
+  <div class="stats" id="input_stats"></div>
+  <div style="margin-top:12px;">
+    <div>Build: </div><div id="build_choice">N/A</div>
+    <div>Substat %: </div><div id="substat_choice">N/A</div>
+    <div id="result">Results will appear here.</div>
+  </div>
+  <div class="nav" style="margin-top:20px;">
+    <a href="https://discord.gg/fmaster" class="card" target="_blank" rel="noopener noreferrer">
+      <div class="icon">🔨</div>
+      <div>Discord Link</div>
+    </a>
+    <a href="https://ieagalei.github.io/FmDPS/" class="card">
+      <div class="icon">🧮</div>
+      <div>DPS Tool</div>
+    </a>
+    <a href="forge.html" class="card">
+      <div class="icon">🛠️</div>
+      <div>Forge Maths</div>
+    </a>
+    <a href="research.html" class="card">
+      <div class="icon">🌳</div>
+      <div>Tech Tree Maths</div>
+    </a>
+  </div>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  function build(num) {
+    switch(num) {
+      case 0:
+        $('build_choice').textContent = 'Early Regen';
+        break;
+      case 1:
+        $('build_choice').textContent = 'Early DPS';
+        break;
+      case 2:
+        $('build_choice').textContent = 'Early Melee';
+        break;
+      case 3:
+        $('build_choice').textContent = 'Late DPS';
+        break;
+      case 4:
+        $('build_choice').textContent = 'Late Melee';
+        break;
+      case 5:
+        $('build_choice').textContent = 'Late Regen Block';
+        break;
+      case 6:
+        $('build_choice').textContent = 'Late Regen Skill';
+        break;
+      default:
+        $('build_choice').textContent = 'N/A';
+    }
+
+    if ($('build_choice').textContent !== 'N/A' && $('substat_choice').textContent !== 'N/A') {
+      calculate();
+    }
+  }
+
+  function substat(num) {
+    $('substat_choice').textContent = num + '%';
+
+    if ($('build_choice').textContent !== 'N/A' && $('substat_choice').textContent !== 'N/A') {
+      calculate();
+    }
+  }
+
+  function calculate() {
+    let resultText = $('build_choice').textContent + ' (' + $('substat_choice').textContent + ')\n\n';
+    let substats = +$('substat_choice').textContent.slice(0, -1);
+    let num = +0;
+
+    switch($('build_choice').textContent) {
+      case 'Early Regen':
+        num = 12*0.06*substats;
+        resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+        break;
+      case 'Early DPS':
+        if (substats > 70) {
+          num = 5*0.40*substats;
+          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,3*0.40*substats);
+          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        } else {
+          num = 4*0.40*substats;
+          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,4*0.40*substats);
+          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        }
+        num = 4*0.20*substats;
+        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+        break;
+      case 'Early Melee':
+        num = 3*0.50*substats;
+        resultText += 'Melee: ' + num.toFixed(0) + '%\n';
+        num = 3*0.40*substats;
+        resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+        num = Math.min(100,3*0.40*substats);
+        resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        num = 3*0.20*substats;
+        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+        break;
+      case 'Late DPS':
+        num = 6*0.12*substats;
+        resultText += 'Crit. Chance: ' + num.toFixed(0) + '%\n';
+        num = 6*1.00*substats;
+        resultText += 'Crit. Damage: ' + num.toFixed(0) + '%\n';
+        if (substats > 70) {
+          num = 6*0.40*substats;
+          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,3*0.40*substats);
+          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        } else {
+          num = 5*0.40*substats;
+          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,4*0.40*substats);
+          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        }
+        num = 3*0.20*substats;
+        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+        break;
+      case 'Late Melee':
+        num = 6*0.50*substats;
+        resultText += 'Melee: ' + num.toFixed(0) + '%\n';
+        num = 5*0.12*substats;
+        resultText += 'Crit. Chance: ' + num.toFixed(0) + '%\n';
+        num = 5*1.00*substats;
+        resultText += 'Crit. Damage: ' + num.toFixed(0) + '%\n';
+        if (substats > 70) {
+          num = 5*0.40*substats;
+          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,3*0.40*substats);
+          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        } else {
+          num = 4*0.40*substats;
+          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,4*0.40*substats);
+          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        }
+        num = 3*0.20*substats;
+        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+        break;
+      case 'Late Regen Block':
+        num = 12*0.06*substats;
+        resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+        num = 12*0.05*substats;
+        resultText += 'Block: ' + num.toFixed(2) + '%\n';
+        break;        break;
+      case 'Late Regen Skill':
+        if (substats > 90) {
+          num = 8*0.06*substats;
+          resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+          num = 4*0.30*substats;
+          resultText += 'Skill: ' + num.toFixed(0) + '%\n';
+          num = 12*0.07*substats;
+          resultText += 'Cooldown: ' + num.toFixed(0) + '%\n';
+        } else if (substats > 65) {
+          num = 8*0.06*substats;
+          resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+          num = 12*0.30*substats;
+          resultText += 'Skill: ' + num.toFixed(0) + '%\n';
+          num = 4*0.07*substats;
+          resultText += 'Cooldown: ' + num.toFixed(0) + '%\n';
+        } else {
+          num = 12*0.06*substats;
+          resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+          num = 12*0.30*substats;
+          resultText += 'Skill: ' + num.toFixed(0) + '%\n';
+        }
+        break;
+      default:
+        resultText += 'Something went wrong';
+    }
+
+    $('result').textContent = resultText;
+  }
+
+  </script>
+</body>
+</html>
