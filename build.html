@@ -62,7 +62,7 @@
   <h2 style="font-weight:normal">Instructions</h2>
   <h3>1. Select Build type</h3>
   <h3>2. Select Substat %</h3>
-  <h3>Please keep in mind the recommended build is Early Regen and Late DPS (range)</h4>
+  <h3>Please keep in mind the recommended build is Early Regen and Late DPS (range). Early and Late mostly divided by forge level 20. These are rough builds, you are still encouraged to test and refine them.</h4>
 
   <div>Early Game Builds</div>
   <div style="margin-bottom:12px;">
@@ -209,25 +209,25 @@
         resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
         break;
       case 'Late Melee':
-        num = 6*0.50*substats;
+        num = 5*0.50*substats;
         resultText += 'Melee: ' + num.toFixed(0) + '%\n';
         num = 5*0.12*substats;
         resultText += 'Crit. Chance: ' + num.toFixed(0) + '%\n';
         num = 5*1.00*substats;
         resultText += 'Crit. Damage: ' + num.toFixed(0) + '%\n';
+        num = 3*0.40*substats;
+        resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
         if (substats > 70) {
-          num = 5*0.40*substats;
-          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
           num = Math.min(100,3*0.40*substats);
           resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          num = 3*0.20*substats;
+          resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
         } else {
-          num = 4*0.40*substats;
-          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
           num = Math.min(100,4*0.40*substats);
           resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          num = 2*0.20*substats;
+          resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
         }
-        num = 3*0.20*substats;
-        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
         break;
       case 'Late Regen Block':
         num = 12*0.06*substats;
