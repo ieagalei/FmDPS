@@ -60,8 +60,9 @@
 <body>
   <h1>🧮 Forge Master DPS - by Kayzee</h1>
   <h2 style="font-weight:normal">Instructions</h2>
-  <h3>1. Copy the total damage from status page</h3>
+  <h3>1. Copy the total damage and health from status page</h3>
   <h3>2. Copy the total speed, double and crit values</h3>
+  <h3>3. Copy the total regen and block values</h3>
 
   <div class="grid-row">
     <div class="column">
@@ -86,7 +87,7 @@
           <tr><td>&gt; 400%</td><td>0.4</td></tr>
         </tbody>
       </table>
-      <div>Please note different weapons have different offsets and rounding so the example can only be used as a rough guide. Also double chance adds on the delay.</div>
+      <div>Please note the above are not set steps for attack speed. Different weapons have different offsets and rounding so the example can only be used as a rough guide. Also double chance adds on the delay.</div>
     </div>
     <div class="column" id="inputs">
       <h2 style="margin:6px 0">Inputs</h2>
@@ -96,6 +97,9 @@
         <label><input type="number" id="e1_double" value="0" step="any"/> Double Chance (%)</label>
         <label><input type="number" id="e1_crit" value="0" step="any"/> Crit Chance (%)</label>
         <label><input type="number" id="e1_critdmg" value="0" step="any"/> Crit Damage (%)</label>
+        <label><input type="number" id="e1_health" value="0" step="any"/> Health</label>
+        <label><input type="number" id="e1_regen" value="0" step="any"/> Health Regen (%)</label>
+        <label><input type="number" id="e1_block" value="0" step="any"/> Block (%)</label>
       </div>
       <div class="stats" id="input_stats"></div>
       <div style="margin-top:12px;">
@@ -139,7 +143,10 @@
       const dbl = parseInputValue(prefix + '_double') / 100;
       const crit = parseInputValue(prefix + '_crit') / 100;
       const critdmg = (parseInputValue(prefix + '_critdmg') / 100) + 0.2;
-      return { damage, speed, double: dbl, crit, critdmg };
+      const health = parseInputValue(prefix + '_health');
+      const regen = parseInputValue(prefix + '_regen') / 100;
+      const block = parseInputValue(prefix + '_block') / 100;
+      return { damage, speed, double: dbl, crit, critdmg, health, regen, block };
     }
 
     function computeDPS(p) {
@@ -149,6 +156,9 @@
       const critdmg = Number(p.critdmg) || 0;
       let spd = Number(p.speed) || 0;
       let spds = Number(p.speed) || 0;
+      let heal = Number(p.health) || 0;
+      let regn = Number(p.regen) || 0;
+      let blck = Number(p.block) || 0;
 
       dbl = Math.max(0, Math.min(1, dbl));
 
@@ -163,8 +173,10 @@
       spd = ((1 - dbl) * spd) + (dbl * spdd);
       dbl = 1 + dbl;
 
+      const denam = (1-blck);
+      blck = (denam <= 0) ? 0 : 1 / denam;
 
-      return { dmg: dmg * dbl * crit * spd, spd, dbl, crit };
+      return { dmg: dmg * dbl * crit * spd, spd, dbl, crit, heal: heal * regn * blck, regn, blck };
     }
 
     function calculate() {
@@ -181,6 +193,10 @@
       resultText += `Double multiplier applied: ${stats.dbl.toFixed(2)}\n`;
       resultText += `Crit multiplier applied: ${stats.crit.toFixed(2)}\n`;
 
+      resultText += `HPS: ${formatNumber(stats.heal)}\n`;
+      resultText += `Regen multiplier applied: ${stats.regn.toFixed(2)}\n`;
+      resultText += `Block multiplier applied: ${stats.blck.toFixed(2)}\n`;
+
       $('result').textContent = resultText;
     }
 
@@ -195,13 +211,13 @@
 
     // Live parsed input display
     (function attachInputListeners() {
-      const ids = ['e1_damage','e1_speed','e1_double','e1_crit','e1_critdmg'];
+      const ids = ['e1_damage','e1_speed','e1_double','e1_crit','e1_critdmg','e1_health','e1_regen','e1_block'];
       ids.forEach(id => {
         const el = $(id);
         if (el) el.addEventListener('input', () => {
           const parsed = getStats('e1');
           $('input_stats').textContent =
-            `Parsed inputs — Damage: ${formatNumber(parsed.damage)}, Speed: ${(parsed.speed*100).toFixed(2)}%, Double: ${(parsed.double*100).toFixed(2)}%, Crit: ${(parsed.crit*100).toFixed(2)}%`;
+            `Parsed inputs — Damage: ${formatNumber(parsed.damage)}, Speed: ${(parsed.speed*100).toFixed(2)}%, Double: ${(parsed.double*100).toFixed(2)}%, Crit: ${(parsed.crit*100).toFixed(2)}%, Critdmg: ${(parsed.critdmg*100).toFixed(2)}%, Health: ${(parsed.health)}, Regen: ${(parsed.regen*100).toFixed(2)}%, Block: ${(parsed.block*100).toFixed(2)}%`;
         });
       });
     })();
