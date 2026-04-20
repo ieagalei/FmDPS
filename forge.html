@@ -62,6 +62,7 @@
   <h2 style="font-weight:normal">Instructions</h2>
   <h3>1. Input next forge level</h3>
   <h3>2. Input Forge discount and forge speed boosts (enter as percent values, e.g. 12 for 12%)</h3>
+  <h3>3. Input final forge level, and number of ascensions if applicable</h3>
 
   <div class="grid-row">
     <div class="column">
@@ -70,6 +71,7 @@
           <tr><th>Forge Level</th><th>  Cost</th><th>  Time</th></tr>
         </thead>
         <tbody>
+          <tr><td>1</td><td>0</td><td>0m</td></tr>
           <tr><td>2</td><td>400</td><td>5m</td></tr>
           <tr><td>3</td><td>700</td><td>15m</td></tr>
           <tr><td>4</td><td>1500</td><td>30m</td></tr>
@@ -113,6 +115,9 @@
         <label><input type="number" id="e1_level" value="0" step="1" min="0"/> Forge Level</label>
         <label><input type="number" id="e1_speed" value="0" step="any"/> Forge Speed (%)</label>
         <label><input type="number" id="e1_discount" value="0" step="any"/> Forge Discount (%)</label>
+        <label><input type="number" id="e1_level2" value="0" step="any"/> Final Forge Level</label>
+        <label><input type="number" id="e1_asc" value="0" step="any"/> Forge Ascensions</label>
+
       </div>
       <div class="stats" id="input_stats"></div>
       <div style="margin-top:12px;">
@@ -154,7 +159,9 @@
       const level = parseInputValue(prefix + '_level');
       const speed = parseInputValue(prefix + '_speed');
       const discount = parseInputValue(prefix + '_discount');
-      return { level, speed, discount };
+      const level2 = parseInputValue(prefix + '_level2');
+      const asc = parseInputValue(prefix + '_asc');
+      return { level, speed, discount, level2, asc };
     }
 
     function formatNumber(num) {
@@ -281,7 +288,7 @@
 
       // Live parsed input display wiring
       (function attachInputListeners() {
-        const ids = ['e1_level','e1_speed','e1_discount'];
+        const ids = ['e1_level','e1_speed','e1_discount','e1_level2','e1_asc'];
         ids.forEach(id => {
           const el = document.getElementById(id);
           if (el) el.addEventListener('input', () => {
@@ -290,8 +297,10 @@
             const speedPct = Number.isFinite(parsed.speed) ? parsed.speed : 0;
             const discountPct = Number.isFinite(parsed.discount) ? Math.abs(parsed.discount) : 0;
             const statsEl = document.getElementById('input_stats');
+            const level2Text = Number.isFinite(parsed.level2) ? parsed.level2 : 0;
+            const ascText = Number.isFinite(parsed.asc) ? parsed.asc : 0;
             if (statsEl) {
-              statsEl.textContent = `Parsed inputs — Level: ${levelText}, Speed: ${speedPct}% , Discount (abs): ${discountPct}%`;
+              statsEl.textContent = `Parsed inputs — Level: ${levelText}, Speed: ${speedPct}% , Discount (abs): ${discountPct}%, Final Level: ${level2Text} , Ascension: ${ascText}`;
             }
           });
         });
@@ -302,8 +311,16 @@
     function calculate() {
       const parsed = getStats('e1');
       const level = Math.round(parsed.level);
+      const asc = Math.round(parsed.asc);
+      const level2 = Math.round(parsed.level2);
+
       if (!Number.isFinite(level) || level <= 0) {
         $('result').textContent = 'Please enter a valid Forge Level (e.g. 2, 3, ...).';
+        return;
+      }
+
+      if (!Number.isFinite(asc) || asc < 0 || asc > 3) {
+        $('result').textContent = 'Are you sure you are okay? #ascended-chat not #advanced-chat';
         return;
       }
 
@@ -313,8 +330,58 @@
         return;
       }
 
-      const baseCost = Number(lvlEntry.cost) || 0;
-      const baseTimeText = String(lvlEntry.timeText || '').trim();
+      let baseSeconds;  
+      let baseCost = Number(lvlEntry.cost) || 0;
+      let baseTimeText = String(lvlEntry.timeText || '').trim();
+      try {
+        baseSeconds = window.parseDurationToSeconds(baseTimeText);
+      } catch (err) {
+        $('result').textContent = `Could not parse base time string "${baseTimeText}": ${err.message || err}`;
+        return;
+      }
+
+      if (asc != 0 || level2 != 0) {
+        const lvlEntry2 = (window.forgeLevels || []).find(x => x.level === level2);
+        if (!lvlEntry2 && lvlEntry != 1) {
+          $('result').textContent = `No data for Final Forge level ${level2}.`;
+          return;
+        }
+        let lvlEntry3 = lvlEntry;
+
+        if (level >= level2 && asc == 0) {
+          $('result').textContent = `Forge level ${level} must be less than Final Forge level ${level2}.`;
+          return;
+        }
+        if (level < level2) {
+          if (level == level2+1) {
+            baseCost = asc*41892000;
+            baseSeconds = asc*10414860;
+          } else {
+            for (let i = level+1; i < (level2+1) ; i++) {
+              lvlEntry3 = (window.forgeLevels || []).find(x => x.level === i)
+              baseCost += Number(lvlEntry3.cost) || 0;
+              baseTimeText = String(lvlEntry3.timeText || '').trim();
+              baseSeconds += window.parseDurationToSeconds(baseTimeText);
+            }
+            baseCost += asc*41892000;
+            baseSeconds += asc*10414860;
+          }
+        } else if (level == level2) {
+            baseCost += asc*41892000;
+            baseSeconds += asc*10414860;
+        } else {
+          for (let i = level2+1; i < level ; i++) {
+            lvlEntry3 = (window.forgeLevels || []).find(x => x.level === i)
+            baseCost -= Number(lvlEntry3.cost) || 0;
+            baseTimeText = String(lvlEntry3.timeText || '').trim();
+            baseSeconds -= window.parseDurationToSeconds(baseTimeText);
+          }
+          baseCost += asc*41892000;
+          baseSeconds += asc*10414860;
+        }
+      }
+
+      // gold 41892000 time 10414860 gem 24000
 
       // Treat inputs as percent values (user enters e.g. 12 meaning 12%)
       const speedInputPct = Number(parsed.speed) || 0;           // e.g. 12 -> 12%
@@ -328,7 +395,7 @@
       discountFraction = Math.max(0, Math.min(1, discountFraction));
 
       // Calculate discounted cost (cost cannot go negative)
-      const discountedCost = Math.max(0, Math.round(baseCost * (1 - discountFraction)));
+      let discountedCost = Math.max(0, Math.round(baseCost * (1 - discountFraction)));
 
       // Speed: interpret as percent increase in speed -> time divided by (1 + speedFraction)
       const speedFactor = 1 + speedFraction;
@@ -337,16 +404,12 @@
         return;
       }
 
-      let baseSeconds;
-      try {
-        baseSeconds = window.parseDurationToSeconds(baseTimeText);
-      } catch (err) {
-        $('result').textContent = `Could not parse base time string "${baseTimeText}": ${err.message || err}`;
-        return;
-      }
-
       const spedUpSeconds = baseSeconds / speedFactor;
       const spedUpRounded = Math.max(0, Math.round(spedUpSeconds));
+
+      if (asc != 0 || level2 != 0) {
+          discountedCost += asc*3000000;
+      }
 
       const baseTimeFormatted = window.formatDHMS(window.secondsToDHMS(baseSeconds, { fractional: false }));
       const spedTimeFormatted = window.formatDHMS(window.secondsToDHMS(spedUpRounded, { fractional: false }));
@@ -360,18 +423,24 @@
       // Build result text
       let resultText = '';
       resultText += `Forge Level: ${level}\n\n`;
+      if (asc != 0 || level2 != 0) {
+        resultText += `Final Forge Level: ${level2}\n\n`;
+        resultText += `Number of Ascensions: ${asc}\n\n`;
+      }
       resultText += `Base Cost: ${formatNumber(baseCost)}\n`;
       resultText += `Discount (entered, abs): ${discountInputPct}% → fraction: ${discountFraction}\n`;
-      resultText += `Discounted Cost: ${formatNumber(discountedCost)}\n\n`;
+      resultText += `Final Cost: ${formatNumber(discountedCost)}\n\n`;
 
       resultText += `Base Time (table): ${baseTimeText}\n`;
       resultText += `Base Time (parsed): ${baseTimeFormatted} → ${baseSeconds} seconds\n`;
       resultText += `Speed (entered): ${speedInputPct}% → factor: ${speedFactor.toFixed(4)}\n`;
       resultText += `Sped-up Time: ${spedTimeFormatted} → ${spedUpRounded} seconds\n\n`;
+      resultText += `Gem estimate: ${Math.round(spedUpRounded/433)}\n\n`;
 
       resultText += `Notes:\n`;
       resultText += `- Discount is taken as the absolute value of the input and applied as a percent (e.g. 12 -> 12%).\n`;
       resultText += `- Speed is taken as a percent and reduces time by dividing by (1 + speedFraction) (e.g. 20% -> divide time by 1.20).\n`;
+      resultText += `- ascension cost of 3M is never discounted.\n`;
 
       $('result').textContent = resultText;
     }
