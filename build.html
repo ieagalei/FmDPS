@@ -62,7 +62,7 @@
   <h2 style="font-weight:normal">Instructions</h2>
   <h3>1. Select Build type</h3>
   <h3>2. Select Substat %</h3>
-  <h3>Please keep in mind the recommended build is Early Regen and Late DPS (range). Early and Late mostly divided by forge level 20. These are rough builds, you are still encouraged to test and refine them.</h4>
+  <h3>Please keep in mind the recommended build is Early Regen and Late range DPS (now either Late PVP or Late Dungeon/Brawl). Early and Late mostly divided by forge level 20 when double substats are more available. These are rough builds, you are still encouraged to test and refine them.</h4>
 
   <div>Early Game Builds</div>
   <div style="margin-bottom:12px;">
@@ -72,10 +72,11 @@
   </div>
   <div>Late Game Builds</div>
   <div style="margin-bottom:12px;">
-    <button onclick="build(3)">Late DPS</button>
+    <button onclick="build(3)">Late PVP</button>
     <button onclick="build(4)">Late Melee</button>
     <button onclick="build(5)">Late Regen Block</button>
     <button onclick="build(6)">Late Regen Skill</button>
+    <button onclick="build(7)">Late Dungeon/Brawl</button>
   </div>
   <div>Substat Quality (100% is max substats)</div>
   <div style="margin-bottom:12px;">
@@ -126,7 +127,7 @@
         $('build_choice').textContent = 'Early Melee';
         break;
       case 3:
-        $('build_choice').textContent = 'Late DPS';
+        $('build_choice').textContent = 'Late PVP';
         break;
       case 4:
         $('build_choice').textContent = 'Late Melee';
@@ -136,6 +137,9 @@
         break;
       case 6:
         $('build_choice').textContent = 'Late Regen Skill';
+        break;
+      case 7:
+        $('build_choice').textContent = 'Late Dungeon/Brawl';
         break;
       default:
         $('build_choice').textContent = 'N/A';
@@ -162,100 +166,119 @@
     switch($('build_choice').textContent) {
       case 'Early Regen':
         num = 12*0.06*substats;
-        resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+        resultText += '(12)Regen: ' + num.toFixed(0) + '%\n';
         break;
       case 'Early DPS':
         if (substats > 70) {
           num = 5*0.40*substats;
-          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
           num = Math.min(100,3*0.40*substats);
-          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
         } else {
           num = 4*0.40*substats;
-          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          resultText += '(4)Attack Speed: ' + num.toFixed(0) + '%\n';
           num = Math.min(100,4*0.40*substats);
-          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          resultText += '(4)Double Chance: ' + num.toFixed(0) + '%\n';
         }
         num = 4*0.20*substats;
-        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+        resultText += '(4)Lifesteal: ' + num.toFixed(0) + '%\n';
         break;
       case 'Early Melee':
         num = 3*0.50*substats;
-        resultText += 'Melee: ' + num.toFixed(0) + '%\n';
+        resultText += '(3)Melee: ' + num.toFixed(0) + '%\n';
         num = 3*0.40*substats;
-        resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+        resultText += '(3)Attack Speed: ' + num.toFixed(0) + '%\n';
         num = Math.min(100,3*0.40*substats);
-        resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+        resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
         num = 3*0.20*substats;
-        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+        resultText += '(3)Lifesteal: ' + num.toFixed(0) + '%\n';
         break;
-      case 'Late DPS':
+      case 'Late PVP':
         num = 6*0.12*substats;
-        resultText += 'Crit. Chance: ' + num.toFixed(0) + '%\n';
+        resultText += '(6)Crit. Chance: ' + num.toFixed(0) + '%\n';
         num = 6*1.00*substats;
-        resultText += 'Crit. Damage: ' + num.toFixed(0) + '%\n';
+        resultText += '(6)Crit. Damage: ' + num.toFixed(0) + '%\n';
         if (substats > 70) {
           num = 6*0.40*substats;
-          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          resultText += '(6)Attack Speed: ' + num.toFixed(0) + '%\n';
           num = Math.min(100,3*0.40*substats);
-          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
         } else {
           num = 5*0.40*substats;
-          resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+          resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
           num = Math.min(100,4*0.40*substats);
-          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          resultText += '(4)Double Chance: ' + num.toFixed(0) + '%\n';
         }
         num = 3*0.20*substats;
-        resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+        resultText += '(3)Lifesteal: ' + num.toFixed(0) + '%\n';
         break;
       case 'Late Melee':
         num = 5*0.50*substats;
-        resultText += 'Melee: ' + num.toFixed(0) + '%\n';
+        resultText += '(5)Melee: ' + num.toFixed(0) + '%\n';
         num = 5*0.12*substats;
-        resultText += 'Crit. Chance: ' + num.toFixed(0) + '%\n';
+        resultText += '(5)Crit. Chance: ' + num.toFixed(0) + '%\n';
         num = 5*1.00*substats;
-        resultText += 'Crit. Damage: ' + num.toFixed(0) + '%\n';
+        resultText += '(5)Crit. Damage: ' + num.toFixed(0) + '%\n';
         num = 3*0.40*substats;
-        resultText += 'Attack Speed: ' + num.toFixed(0) + '%\n';
+        resultText += '(3)Attack Speed: ' + num.toFixed(0) + '%\n';
         if (substats > 70) {
           num = Math.min(100,3*0.40*substats);
-          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
           num = 3*0.20*substats;
-          resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+          resultText += '(3)Lifesteal: ' + num.toFixed(0) + '%\n';
         } else {
           num = Math.min(100,4*0.40*substats);
-          resultText += 'Double Chance: ' + num.toFixed(0) + '%\n';
+          resultText += '(4)Double Chance: ' + num.toFixed(0) + '%\n';
           num = 2*0.20*substats;
-          resultText += 'Lifesteal: ' + num.toFixed(0) + '%\n';
+          resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
         }
         break;
       case 'Late Regen Block':
         num = 12*0.06*substats;
-        resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+        resultText += '(12)Regen: ' + num.toFixed(0) + '%\n';
         num = 12*0.05*substats;
-        resultText += 'Block: ' + num.toFixed(2) + '%\n';
+        resultText += '(12)Block: ' + num.toFixed(2) + '%\n';
         break;        break;
       case 'Late Regen Skill':
         if (substats > 90) {
           num = 8*0.06*substats;
-          resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+          resultText += '(8)Regen: ' + num.toFixed(0) + '%\n';
           num = 4*0.30*substats;
-          resultText += 'Skill: ' + num.toFixed(0) + '%\n';
+          resultText += '(4)Skill: ' + num.toFixed(0) + '%\n';
           num = 12*0.07*substats;
-          resultText += 'Cooldown: ' + num.toFixed(0) + '%\n';
+          resultText += '(12)Cooldown: ' + num.toFixed(0) + '%\n';
         } else if (substats > 65) {
           num = 8*0.06*substats;
-          resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+          resultText += '(8)Regen: ' + num.toFixed(0) + '%\n';
           num = 12*0.30*substats;
-          resultText += 'Skill: ' + num.toFixed(0) + '%\n';
+          resultText += '(12)Skill: ' + num.toFixed(0) + '%\n';
           num = 4*0.07*substats;
-          resultText += 'Cooldown: ' + num.toFixed(0) + '%\n';
+          resultText += '(4)Cooldown: ' + num.toFixed(0) + '%\n';
         } else {
           num = 12*0.06*substats;
-          resultText += 'Regen: ' + num.toFixed(0) + '%\n';
+          resultText += '(12)Regen: ' + num.toFixed(0) + '%\n';
           num = 12*0.30*substats;
-          resultText += 'Skill: ' + num.toFixed(0) + '%\n';
+          resultText += '(12)Skill: ' + num.toFixed(0) + '%\n';
         }
+        break;
+      case 'Late Dungeon/Brawl':
+        num = 4*0.12*substats;
+        resultText += '(4)Crit. Chance: ' + num.toFixed(0) + '%\n';
+        num = 4*1.00*substats;
+        resultText += '(4)Crit. Damage: ' + num.toFixed(0) + '%\n';
+        if (substats > 70) {
+          num = 7*0.40*substats;
+          resultText += '(7)Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,3*0.40*substats);
+          resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
+        } else {
+          num = 5*0.40*substats;
+          resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
+          num = Math.min(100,4*0.40*substats);
+          resultText += '(4)Double Chance: ' + num.toFixed(0) + '%\n';
+        }
+        num = 6*0.20*substats;
+        resultText += '(6)Lifesteal: ' + num.toFixed(0) + '%\n';
         break;
       default:
         resultText += 'Something went wrong';
