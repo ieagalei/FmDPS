@@ -59,7 +59,7 @@
 
 <body>
   <h1>🛠️ Forge Master Forging - by Kayzee</h1>
-  <h2 style="font-weight:normal">Instructions</h2>
+  <h2 style="font-weight:normal"><s>Advanced</s> Ascended Instructions</h2>
   <h3>1. Input next forge level</h3>
   <h3>2. Input Forge discount and forge speed boosts (enter as percent values, e.g. 12 for 12%)</h3>
   <h3>3. Input final forge level, and number of ascensions if applicable</h3>
@@ -112,7 +112,7 @@
     <div class="column" id="inputs">
       <h2 style="margin:6px 0">Inputs</h2>
       <div id="input">
-        <label><input type="number" id="e1_level" value="0" step="1" min="0"/> Forge Level</label>
+        <label><input type="number" id="e1_level" value="0" step="1" min="0"/> Next Forge Level</label>
         <label><input type="number" id="e1_speed" value="0" step="any"/> Forge Speed (%)</label>
         <label><input type="number" id="e1_discount" value="0" step="any"/> Forge Discount (%)</label>
         <label><input type="number" id="e1_level2" value="0" step="any"/> Final Forge Level</label>
@@ -349,7 +349,7 @@
         let lvlEntry3 = lvlEntry;
 
         if (level >= level2 && asc == 0) {
-          $('result').textContent = `Forge level ${level} must be less than Final Forge level ${level2}.`;
+          $('result').textContent = `Next Forge level ${level} must be less than Final Forge level ${level2}.`;
           return;
         }
         if (level < level2) {
@@ -422,25 +422,25 @@
 
       // Build result text
       let resultText = '';
-      resultText += `Forge Level: ${level}\n\n`;
+      resultText += `Next Forge Level: ${level}\n`;
       if (asc != 0 || level2 != 0) {
-        resultText += `Final Forge Level: ${level2}\n\n`;
+        resultText += `Final Forge Level: ${level2}\n`;
         resultText += `Number of Ascensions: ${asc}\n\n`;
       }
       resultText += `Base Cost: ${formatNumber(baseCost)}\n`;
       resultText += `Discount (entered, abs): ${discountInputPct}% → fraction: ${discountFraction}\n`;
-      resultText += `Final Cost: ${formatNumber(discountedCost)}\n\n`;
+      resultText += `Final Cost: ${formatNumber(discountedCost)} (includes ascension(s))\n\n`;
 
-      resultText += `Base Time (table): ${baseTimeText}\n`;
-      resultText += `Base Time (parsed): ${baseTimeFormatted} → ${baseSeconds} seconds\n`;
+      resultText += `Next Upgrade Time (table): ${baseTimeText}\n`;
+      resultText += `Total Base Time (parsed): ${baseTimeFormatted} → ${baseSeconds} seconds\n`;
       resultText += `Speed (entered): ${speedInputPct}% → factor: ${speedFactor.toFixed(4)}\n`;
-      resultText += `Sped-up Time: ${spedTimeFormatted} → ${spedUpRounded} seconds\n\n`;
+      resultText += `Total Sped-up Time: ${spedTimeFormatted} → ${spedUpRounded} seconds\n\n`;
       resultText += `Gem estimate: ${Math.round(spedUpRounded/433)}\n\n`;
 
       resultText += `Notes:\n`;
       resultText += `- Discount is taken as the absolute value of the input and applied as a percent (e.g. 12 -> 12%).\n`;
       resultText += `- Speed is taken as a percent and reduces time by dividing by (1 + speedFraction) (e.g. 20% -> divide time by 1.20).\n`;
-      resultText += `- ascension cost of 3M is never discounted.\n`;
+      resultText += `- Ascension cost of 3M is never discounted.\n`;
 
       $('result').textContent = resultText;
     }
