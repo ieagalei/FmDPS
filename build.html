@@ -62,7 +62,7 @@
   <h2 style="font-weight:normal">Instructions</h2>
   <h3>1. Select Build type</h3>
   <h3>2. Select Substat %</h3>
-  <h3>Please keep in mind the recommended build is Early Regen and Late range DPS (now either Late PVP or Late Dungeon/Brawl). Early and Late mostly divided by forge level 20 when double substats are more available. These are rough builds, you are still encouraged to test and refine them.</h4>
+  <h3>Please keep in mind the recommended build is Early Regen or Early DPS and Late range DPS (now either Late PVP or Late Dungeon/Brawl). Early and Late mostly divided by forge level 20 when double substats are more available. These are rough builds, you are still encouraged to test and refine them.</h4>
 
   <div>Early Game Builds</div>
   <div style="margin-bottom:12px;">
@@ -165,7 +165,7 @@
 
     switch($('build_choice').textContent) {
       case 'Early Regen':
-        num = 12*0.06*substats;
+        num = 12*0.04*substats;
         resultText += '(12)Regen: ' + num.toFixed(0) + '%\n';
         break;
       case 'Early DPS':
@@ -234,28 +234,28 @@
         }
         break;
       case 'Late Regen Block':
-        num = 12*0.06*substats;
+        num = 12*0.04*substats;
         resultText += '(12)Regen: ' + num.toFixed(0) + '%\n';
         num = 12*0.05*substats;
         resultText += '(12)Block: ' + num.toFixed(2) + '%\n';
         break;        break;
       case 'Late Regen Skill':
         if (substats > 90) {
-          num = 8*0.06*substats;
+          num = 8*0.04*substats;
           resultText += '(8)Regen: ' + num.toFixed(0) + '%\n';
           num = 4*0.30*substats;
           resultText += '(4)Skill: ' + num.toFixed(0) + '%\n';
           num = 12*0.07*substats;
           resultText += '(12)Cooldown: ' + num.toFixed(0) + '%\n';
         } else if (substats > 65) {
-          num = 8*0.06*substats;
+          num = 8*0.04*substats;
           resultText += '(8)Regen: ' + num.toFixed(0) + '%\n';
           num = 12*0.30*substats;
           resultText += '(12)Skill: ' + num.toFixed(0) + '%\n';
           num = 4*0.07*substats;
           resultText += '(4)Cooldown: ' + num.toFixed(0) + '%\n';
         } else {
-          num = 12*0.06*substats;
+          num = 12*0.04*substats;
           resultText += '(12)Regen: ' + num.toFixed(0) + '%\n';
           num = 12*0.30*substats;
           resultText += '(12)Skill: ' + num.toFixed(0) + '%\n';
