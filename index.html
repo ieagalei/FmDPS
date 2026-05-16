@@ -63,6 +63,7 @@
   <h3>1. Copy the total damage and health from status page</h3>
   <h3>2. Copy the total speed, double and crit values</h3>
   <h3>3. Copy the total lifesteal, regen and block values</h3>
+  <h3> Four weighting of block's effectiveness, both lifesteal and regen is boosted by block for total HPS</h3>
 
   <div class="grid-row">
     <div class="column" id="inputs">
@@ -181,7 +182,7 @@
       const denam = (1-blck);
       blck = (denam <= 0) ? 0 : 1 / denam;
 
-      return { dmg: dmg * dbl * crit * spd, spd, dbl, crit, heal: (dmg * dbl * crit * spd * lsl) + (heal * regn * blck), regn, blck };
+      return { dmg: dmg * dbl * crit * spd, spd, dbl, crit, heal: (dmg * dbl * crit * spd * lsl * blck) + (heal * regn * blck), regn, blck };
     }
 
     function calculate() {
