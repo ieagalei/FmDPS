@@ -354,35 +354,37 @@
           return;
         }
         if (level < level2) {
-          if (level == level2+1) {
-            baseCost = asc*41892000;
-            baseSeconds = asc*10414860;
-          } else {
-            for (let i = level+1; i < (level2+1) ; i++) {
-              lvlEntry3 = (window.forgeLevels || []).find(x => x.level === i)
-              baseCost += Number(lvlEntry3.cost) || 0;
-              baseTimeText = String(lvlEntry3.timeText || '').trim();
-              baseSeconds += window.parseDurationToSeconds(baseTimeText);
-            }
-            baseCost += asc*41892000;
-            baseSeconds += asc*10414860;
-          }
-        } else if (level == level2) {
-            baseCost += asc*41892000;
-            baseSeconds += asc*10414860;
-        } else {
-          for (let i = level2+1; i < level ; i++) {
-            lvlEntry3 = (window.forgeLevels || []).find(x => x.level === i)
-            baseCost -= Number(lvlEntry3.cost) || 0;
+          for (let i = level+1; i < level2+1 ; i++) {
+            lvlEntry3 = (window.forgeLevels || []).find(x => x.level === i);
+            baseCost += Number(lvlEntry3.cost) || 0;
             baseTimeText = String(lvlEntry3.timeText || '').trim();
-            baseSeconds -= window.parseDurationToSeconds(baseTimeText);
+            baseSeconds += window.parseDurationToSeconds(baseTimeText);
           }
           baseCost += asc*41892000;
           baseSeconds += asc*10414860;
+        } else if (level == level2) {
+            baseCost += asc*41892000;
+            baseSeconds += asc*10452000;
+        } else {
+          if (level == level2+1) {
+            baseCost = asc*41892000;
+            baseSeconds = asc*10452000;
+          } else {
+            for (let i = level2; i < level+1 ; i++) {
+              lvlEntry3 = (window.forgeLevels || []).find(x => x.level === i);
+              baseCost -= Number(lvlEntry3.cost) || 0;
+              baseTimeText = String(lvlEntry3.timeText || '').trim();
+              baseSeconds -= window.parseDurationToSeconds(baseTimeText);
+            }
+            baseCost += asc*41892000;
+            baseSeconds += asc*10452000;
+          }
         }
       }
+      baseTimeText = String(lvlEntry.timeText || '').trim();
 
       // gold 41892000 time 10414860 gem 24000
+      // new time is 10452000
 
       // Treat inputs as percent values (user enters e.g. 12 meaning 12%)
       const speedInputPct = Number(parsed.speed) || 0;           // e.g. 12 -> 12%
