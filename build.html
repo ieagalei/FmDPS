@@ -62,31 +62,37 @@
   <h2 style="font-weight:normal">Instructions</h2>
   <h3>1. Select Build type</h3>
   <h3>2. Select Substat %</h3>
-  <h3>These are rough build ideas, some are better than others e.g. Early Regen for dungeon, Late Range for PVP.</h3>
-  <h3>I added scores to the builds decided arbitrarily / Don't over think - it might help to compare two similar builds. </h3>
-  <h3> Please always consider improving these builds</h3>
+  <div>These are rough build ideas, some are better than others</div>
+  <div>The first build for each stage is decent and start with 70% if unsure</div>
+  <div>I added scores to the builds that I decided on arbitrarily</div>
+  <div>Don't over think - it might help to compare two similar builds</div>
+  <div>Please always consider improving these builds</div>
+  <div>I have updated to account for clan tech and fairies (Sep/Oct 2026)</div>
 
-  <div>Early Game Builds</div>
+  <h3>Early Game Builds - Regen is default</h3>
   <div style="margin-bottom:12px;">
     <button onclick="build(0)">Early Regen</button>
     <button onclick="build(1)">Early Range</button>
     <button onclick="build(2)">Early Melee</button>
     <button onclick="build(3)">Early Skill</button>
   </div>
-  <div>Late Game Builds</div>
+  <h3>Mid Game Builds - Mid Range is default</h3>
   <div style="margin-bottom:12px;">
-    <button onclick="build(4)">Late Range</button>
-    <button onclick="build(5)">Late Melee</button>
-    <button onclick="build(6)">Late Bruiser</button>
-    <button onclick="build(7)">Late Speed</button>
-    <button onclick="build(8)">Late Double</button>
-    <button onclick="build(9)">Late Crit</button>
-    <button onclick="build(10)">Late Regen</button>
-    <button onclick="build(11)">Late Block</button>
-    <button onclick="build(12)">Late Skill</button>
-    <button onclick="build(13)">Late Cursed</button>
+    <button onclick="build(4)">Mid DPS Range</button>
+    <button onclick="build(5)">Mid DPS Melee</button>
+    <button onclick="build(6)">Mid PVP Range</button>
+    <button onclick="build(7)">Mid PVP Melee</button>
+    <button onclick="build(8)">Mid PVP Skill</button>
   </div>
-  <div>Substat Quality (100% is max substats)</div>
+  <h3>Late Game and Other Builds - Late Range is default</h3>
+  <div style="margin-bottom:12px;">
+    <button onclick="build(9)">Late Range</button>
+    <button onclick="build(10)">Late Melee</button>
+    <button onclick="build(11)">Late Skill</button>
+    <button onclick="build(12)">Late Regen</button>
+    <button onclick="build(13)">Late Reflect</button>
+  </div>
+  <h3>Substat Quality (100% is max substats)</h3>
   <div style="margin-bottom:12px;">
     <button onclick="substat(50)">50% Substats</button>
     <button onclick="substat(70)">70% Substats</button>
@@ -94,13 +100,22 @@
     <button onclick="substat(95)">95% Substats</button>
     <button onclick="substat(100)">100% Substats</button>
   </div>
+  <h3>Score system is based on the following</h3>
+  <div>Total score = product of all other scores</div>
+  <div>DPS score = product of all DPS sources :{(100%+dps)/100%}</div>
+  <div>Skill score = product of all skill sources :{(100%+skill)/100%}</div>
+  <div>Survival score = 5(100%+Regen) or DPS * (Lifesteal) divided by 2(range) or 5(melee)</div>
+  <div>Survival is scaled to (100%+Health) and (100%-block)</div>
+  <div>RNG = product of all RNG sources :{(100%-rng)/10%}</div>
+  <div>scores are based on 100% Substats</div>
 
   <div class="stats" id="input_stats"></div>
   <div style="margin-top:12px;">
-    <div>Build: </div><div id="build_choice">N/A</div>
-    <div>Substat %: </div><div id="substat_choice">N/A</div>
     <div id="result">Results will appear here.</div>
+    <div>-</div><div>Build: </div><div id="build_choice">N/A</div>
+    <div>Substat %: </div><div id="substat_choice">N/A</div>
   </div>
+
   <div class="nav" style="margin-top:20px;">
     <a href="https://discord.gg/forgemaster" class="card" target="_blank" rel="noopener noreferrer">
       <div class="icon">🔨</div>
@@ -138,34 +153,34 @@
         $('build_choice').textContent = 'Early Skill';
         break;
       case 4:
-        $('build_choice').textContent = 'Late Range';
+        $('build_choice').textContent = 'Mid DPS Range';
         break;
       case 5:
-        $('build_choice').textContent = 'Late Melee';
+        $('build_choice').textContent = 'Mid DPS Melee';
         break;
       case 6:
-        $('build_choice').textContent = 'Late Bruiser';
+        $('build_choice').textContent = 'Mid PVP Range';
         break;
       case 7:
-        $('build_choice').textContent = 'Late Speed';
+        $('build_choice').textContent = 'Mid PVP Melee';
         break;
       case 8:
-        $('build_choice').textContent = 'Late Double';
+        $('build_choice').textContent = 'Mid PVP Skill';
         break;
       case 9:
-        $('build_choice').textContent = 'Late Crit';
+        $('build_choice').textContent = 'Late Range';
         break;
       case 10:
-        $('build_choice').textContent = 'Late Regen';
+        $('build_choice').textContent = 'Late Melee';
         break;
       case 11:
-        $('build_choice').textContent = 'Late Block';
-        break;
-      case 12:
         $('build_choice').textContent = 'Late Skill';
         break;
+      case 12:
+        $('build_choice').textContent = 'Late Regen';
+        break;
       case 13:
-        $('build_choice').textContent = 'Late Cursed';
+        $('build_choice').textContent = 'Late Reflect';
         break;
       default:
         $('build_choice').textContent = 'N/A';
@@ -207,8 +222,9 @@
         num = 1*0.15*substats;
         resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
         resultText += '\n' + 'DPS score 5.5' + '\n';
-        resultText += 'Survival score 2.1' + '\n';
-        resultText += 'Total score 11.6, RNG of 4' + '\n';
+        resultText += 'Skill score 1.2' + '\n';
+        resultText += 'Survival score 1.7' + '\n';
+        resultText += 'Total score 11.3, RNG of 4' + '\n';
         break;
       case 'Early Melee':
         num = 4*0.50*substats;
@@ -219,41 +235,47 @@
         resultText += '(2)Double Chance: ' + num.toFixed(0) + '%\n';
         num = 2*0.20*substats;
         resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
-        resultText += '\n' + 'DPS score 9.2' + '\n';
-        resultText += 'Survival score 1' + '\n';
-        resultText += 'Total score 9.2, RNG of 6' + '\n';
+        resultText += '\n' + 'DPS score 10.9' + '\n';
+        resultText += 'Survival score 0.9' + '\n';
+        resultText += 'Total score 9.8, RNG of 6' + '\n';
         break;
       case 'Early Skill':
-        num = 8*0.30*substats;
-        resultText += '(8)Skill: ' + num.toFixed(0) + '%\n';
-        num = 4*0.15*substats;
-        resultText += '(4)Health: ' + num.toFixed(0) + '%\n';
-        resultText += '\n' + 'Skill score 3.4' + '\n';
-        resultText += 'Survival score 1.6' + '\n';
-        resultText += 'Total score 5.4' + '\n';
+        num = 6*0.30*substats;
+        resultText += '(6)Skill: ' + num.toFixed(0) + '%\n';
+        num = 3*0.15*substats;
+        resultText += '(3)Damage: ' + num.toFixed(2) + '%\n';
+        num = 3*0.15*substats;
+        resultText += '(3)Health: ' + num.toFixed(2) + '%\n';
+        resultText += '\n' + 'DPS score 1.5' + '\n';
+        resultText += 'Skill score 4.1' + '\n';
+        resultText += 'Survival score 1.5' + '\n';
+        resultText += 'Total score 9.2' + '\n';
         break;
-      case 'Late Range':
+      case 'Mid DPS Range':
         num = 6*0.12*substats;
         resultText += '(6)Crit. Chance: ' + num.toFixed(1) + '%\n';
         num = 6*0.80*substats;
         resultText += '(6)Crit. Damage: ' + num.toFixed(0) + '%\n';
-        num = 6*0.40*substats;
-        resultText += '(6)Attack Speed: ' + num.toFixed(0) + '%\n';
+        num = 5*0.40*substats;
+        resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
         num = Math.min(100,3*0.20*substats);
         resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
         num = 2*0.20*substats;
         resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
         num = 1*0.15*substats;
         resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
-        resultText += '\n' + 'DPS score 28.8' + '\n';
-        resultText += 'Survival score 12.5' + '\n';
-        resultText += 'Total score 360, RNG of 14' + '\n';
+        num = 1*0.15*substats;
+        resultText += '(1)Ranged: ' + num.toFixed(2) + '%\n';
+        resultText += '\n' + 'DPS score 29.2' + '\n';
+        resultText += 'Skill score 1.2' + '\n';
+        resultText += 'Survival score 5.8' + '\n';
+        resultText += 'Total score 203.2, RNG of 11.2' + '\n';
         break;
-      case 'Late Melee':
+      case 'Mid DPS Melee':
         num = 5*0.50*substats;
         resultText += '(5)Melee: ' + num.toFixed(1) + '%\n';
         num = 5*0.12*substats;
-        resultText += '(5)Crit. Chance: ' + num.toFixed(1) + '%\n';
+        resultText += '(5)Crit. Chance: ' + num.toFixed(0) + '%\n';
         num = 5*0.80*substats;
         resultText += '(5)Crit. Damage: ' + num.toFixed(0) + '%\n';
         num = 5*0.40*substats;
@@ -264,130 +286,163 @@
         resultText += '(1)Lifesteal: ' + num.toFixed(0) + '%\n';
         num = 1*0.15*substats;
         resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
-        resultText += '\n' + 'DPS score 59.5' + '\n';
-        resultText += 'Survival score 2.4' + '\n';
-        resultText += 'Total score 142.8, RNG of 24' + '\n';
+        resultText += '\n' + 'DPS score 69.6' + '\n';
+        resultText += 'Skill score 1.2' + '\n';
+        resultText += 'Survival score 2.7' + '\n';
+        resultText += 'Total score 225.5, RNG of 24' + '\n';
         break;
-      case 'Late Bruiser':
-        num = 5*0.50*substats;
-        resultText += '(5)Melee: ' + num.toFixed(1) + '%\n';
-        num = 4*0.12*substats;
-        resultText += '(4)Crit. Chance: ' + num.toFixed(1) + '%\n';
-        num = 4*0.80*substats;
-        resultText += '(4)Crit. Damage: ' + num.toFixed(0) + '%\n';
-        num = 4*0.40*substats;
-        resultText += '(4)Attack Speed: ' + num.toFixed(0) + '%\n';
-        num = Math.min(100,2*0.20*substats);
-        resultText += '(2)Double Chance: ' + num.toFixed(0) + '%\n';
-        num = 2*0.20*substats;
-        resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
-        num = 3*0.15*substats;
-        resultText += '(3)Health: ' + num.toFixed(2) + '%\n';
-        resultText += '\n' + 'DPS score 33.5' + '\n';
-        resultText += 'Survival score 3.9' + '\n';
-        resultText += 'Total score 130.7, RNG of 31' + '\n';
-        break;
-      case 'Late Speed':
-        num = 6*0.12*substats;
-        resultText += '(6)Crit. Chance: ' + num.toFixed(1) + '%\n';
-        num = 6*0.80*substats;
-        resultText += '(6)Crit. Damage: ' + num.toFixed(0) + '%\n';
-        num = 8*0.40*substats;
-        resultText += '(8)Attack Speed: ' + num.toFixed(0) + '%\n';
-        num = Math.min(100,2*0.20*substats);
-        resultText += '(2)Double Chance: ' + num.toFixed(0) + '%\n';
-        num = 2*0.20*substats;
-        resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
-        resultText += '\n' + 'DPS score 27' + '\n';
-        resultText += 'Survival score 10.8' + '\n';
-        resultText += 'Total score 291.6, RNG of 22' + '\n';
-        break;
-      case 'Late Double':
-        num = 5*0.12*substats;
-        resultText += '(5)Crit. Chance: ' + num.toFixed(0) + '%\n';
-        num = 5*0.80*substats;
-        resultText += '(5)Crit. Damage: ' + num.toFixed(0) + '%\n';
-        if (substats > 95) {
-          num = 6*0.40*substats;
-          resultText += '(6)Attack Speed: ' + num.toFixed(0) + '%\n';
-          num = Math.min(100,5*0.20*substats);
-          resultText += '(5)Double Chance: ' + num.toFixed(0) + '%\n';
-        } else {
-          num = 5*0.40*substats;
-          resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
-          num = Math.min(100,6*0.20*substats);
-          resultText += '(6)Double Chance: ' + num.toFixed(0) + '%\n';
-        }
+      case 'Mid PVP Range':
+        num = 7*0.12*substats;
+        resultText += '(7)Crit. Chance: ' + num.toFixed(1) + '%\n';
+        num = 7*0.80*substats;
+        resultText += '(7)Crit. Damage: ' + num.toFixed(0) + '%\n';
+        num = 6*0.40*substats;
+        resultText += '(6)Attack Speed: ' + num.toFixed(0) + '%\n';
         num = 2*0.20*substats;
         resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
         num = 1*0.15*substats;
         resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
-        resultText += '\n' + 'DPS score 27.5' + '\n';
-        resultText += 'Survival score 12' + '\n';
-        resultText += 'Total score 330, RNG of 4' + '\n';
+        num = 1*0.15*substats;
+        resultText += '(1)Ranged: ' + num.toFixed(2) + '%\n';
+        resultText += '\n' + 'DPS score 26.4' + '\n';
+        resultText += 'Skill score 1.2' + '\n';
+        resultText += 'Survival score 5.3' + '\n';
+        resultText += 'Total score 167.9, RNG of 1.6' + '\n';
         break;
-      case 'Late Crit':
-        num = Math.min(100,9*0.12*substats);
-        resultText += '(9)Crit. Chance: ' + num.toFixed(0) + '%\n';
+      case 'Mid PVP Melee':
+        num = 7*0.50*substats;
+        resultText += '(7)Melee: ' + num.toFixed(1) + '%\n';
+        num = 6*0.40*substats;
+        resultText += '(6)Attack Speed: ' + num.toFixed(0) + '%\n';
+        num = Math.min(100,5*0.20*substats);
+        resultText += '(5)Double Chance: ' + num.toFixed(0) + '%\n';
+        num = 2*0.20*substats;
+        resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
+        num = 2*0.15*substats;
+        resultText += '(2)Damage: ' + num.toFixed(1) + '%\n';
+        num = 2*0.15*substats;
+        resultText += '(2)Health: ' + num.toFixed(1) + '%\n';
+        resultText += '\n' + 'DPS score 39,8' + '\n';
+        resultText += 'Skill score 1.3' + '\n';
+        resultText += 'Survival score 4.1' + '\n';
+        resultText += 'Total score 212.1' + '\n';
+        break;
+      case 'Mid PVP Skill':
+        num = 5*0.40*substats;
+        resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
+        num = Math.min(100,3*0.20*substats);
+        resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
+        num = 3*0.20*substats;
+        resultText += '(3)Lifesteal: ' + num.toFixed(0) + '%\n';
+        num = 7*0.30*substats;
+        resultText += '(7)Skill: ' + num.toFixed(1) + '%\n';
+        num = 3*0.15*substats;
+        resultText += '(3)Damage: ' + num.toFixed(2) + '%\n';
+        num = 3*0.15*substats;
+        resultText += '(3)Health: ' + num.toFixed(2) + '%\n';
+        resultText += '\n' + 'DPS score 3.5' + '\n';
+        resultText += 'Skill score 4.5' + '\n';
+        resultText += 'Survival score 3' + '\n';
+        resultText += 'Total score 47.3, RNG of 4' + '\n';
+        break;
+      case 'Late Range':
+        num = 7*0.80*substats;
+        resultText += '(7)Crit. Damage: ' + num.toFixed(0) + '%\n';
+        num = 6*0.40*substats;
+        resultText += '(6)Attack Speed: ' + num.toFixed(0) + '%\n';
+        num = Math.min(100,);
+        resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
+        num = 3*0.20*substats;
+        resultText += '(3)Lifesteal: ' + num.toFixed(0) + '%\n';
+        num = 3*0.30*substats;
+        resultText += '(3)Skill: ' + num.toFixed(1) + '%\n';
+        num = num/15;
+        num = Math.min(80,20*num.toFixed(0));
+        resultText += '~ Crit Fairy gives Crit. Chance: ' + num.toFixed(0) + '%\n';
+        num = 1*0.15*substats;
+        resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
+        num = 1*0.15*substats;
+        resultText += '(1)Ranged: ' + num.toFixed(2) + '%\n';
+        resultText += '\n' + 'DPS score 40.6' + '\n';
+        resultText += 'Skill score 2.2' + '\n';
+        resultText += 'Survival score 12.2' + '\n';
+        resultText += 'Total score 1090, RNG of 8' + '\n';
+        break;
+      case 'Late Melee':
+        num = 6*0.80*substats;
+        resultText += '(6)Crit. Damage: ' + num.toFixed(0) + '%\n';
+        num = 6*0.50*substats;
+        resultText += '(6)Melee: ' + num.toFixed(0) + '%\n';
+        num = 5*0.40*substats;
+        resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
+        num = 4*0.20*substats;
+        resultText += '(4)Lifesteal: ' + num.toFixed(0) + '%\n';
+        num = 3*0.30*substats;
+        resultText += '(3)Skill: ' + num.toFixed(1) + '%\n';
+        num = num/15;
+        num = Math.min(80,20*num.toFixed(0));
+        resultText += '~ Crit Fairy gives Crit. Chance: ' + num.toFixed(0) + '%\n';
+        resultText += '\n' + 'DPS score 60' + '\n';
+        resultText += 'Skill score 1.9' + '\n';
+        resultText += 'Survival score 9.6' + '\n';
+        resultText += 'Total score 1094' + '\n';
+        break;
+      case 'Late Skill':
         num = 6*0.80*substats;
         resultText += '(6)Crit. Damage: ' + num.toFixed(0) + '%\n';
         num = 5*0.40*substats;
         resultText += '(5)Attack Speed: ' + num.toFixed(0) + '%\n';
-        num = 2*0.20*substats;
-        resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
         num = Math.min(100,2*0.20*substats);
         resultText += '(2)Double Chance: ' + num.toFixed(0) + '%\n';
-        resultText += '\n' + 'DPS score 25.2' + '\n';
-        resultText += 'Survival score 11.1' + '\n';
-        resultText += 'Total score 279.7, RNG of 6' + '\n';
+        num = 2*0.20*substats;
+        resultText += '(2)Lifesteal: ' + num.toFixed(0) + '%\n';
+        num = 7*0.30*substats;
+        resultText += '(6)Skill: ' + num.toFixed(1) + '%\n';
+        num = num/15;
+        num = Math.min(80,20*num.toFixed(0));
+        resultText += '~ Crit Fairy gives Crit. Chance: ' + num.toFixed(0) + '%\n';
+        num = 1*0.15*substats;
+        resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
+        num = 1*0.15*substats;
+        resultText += '(1)Range: ' + num.toFixed(2) + '%\n';
+        num = 1*0.15*substats;
+        resultText += '(1)Health: ' + num.toFixed(2) + '%\n';
+        resultText += '\n' + 'DPS score 27.8' + '\n';
+        resultText += 'Skill score 2.1' + '\n';
+        resultText += 'Survival score 6.4' + '\n';
+        resultText += 'Total score 373.6, RNG of 12' + '\n';
         break;
       case 'Late Regen':
         num = 12*0.04*substats;
         resultText += '(12)Regen: ' + num.toFixed(1) + '%\n';
-        num = 12*0.15*substats;
-        resultText += '(12)Health: ' + num.toFixed(0) + '%\n';
-        resultText += '\n' + 'Survival score 20.7' + '\n';
+        num = 3*0.30*substats;
+        resultText += '(3)Skill: ' + num.toFixed(1) + '%\n';
+        num = 8*0.15*substats;
+        resultText += '(8)Health: ' + num.toFixed(0) + '%\n';
+        num = 1*0.07*substats;
+        resultText += '(1)Cooldown: ' + num.toFixed(2) + '%\n';
+        num = Math.min(30,5*num.toFixed(0));
+        resultText += '~ Block Fairy gives Block Chance: ' + num.toFixed(0) + '%\n';
+        resultText += '\n' + 'Skill score 1.9' + '\n';
+        resultText += 'Survival score 23.3' + '\n';
+        resultText += 'Total score 44.3' + '\n';
         break;
-      case 'Late Block':
-        num = 9*0.04*substats;
-        resultText += '(9)Regen: ' + num.toFixed(1) + '%\n';
+      case 'Late Reflect':
+        num = 6*0.30*substats;
+        resultText += '(6)Skill: ' + num.toFixed(0) + '%\n';
+        num = 3*0.15*substats;
+        resultText += '(3)Damage: ' + num.toFixed(2) + '%\n';
         num = 3*0.15*substats;
         resultText += '(3)Health: ' + num.toFixed(2) + '%\n';
+        num = num/10;
+        num = Math.min(30,15*num.toFixed(0));
+        resultText += '~ Reflect Fairy gives Reflect Chance: ' + num.toFixed(0) + '%\n';
         num = 12*0.05*substats;
         resultText += '(12)Block: ' + num.toFixed(0) + '%\n';
-        resultText += '\n' + 'Survival score 24.7, RNG of 4' + '\n';
-        break;
-      case 'Late Skill':
-        if (substats > 90) {
-          num = 8*0.30*substats;
-          resultText += '(8)Skill: ' + num.toFixed(0) + '%\n';
-          num = 4*0.15*substats;
-          resultText += '(4)Health: ' + num.toFixed(0) + '%\n';
-          num = 12*0.07*substats;
-          resultText += '(12)Cooldown: ' + num.toFixed(1) + '%\n';
-          resultText += '\n' + 'Skill score 21.3' + '\n';
-          resultText += 'Survival score 1.6' + '\n';
-          resultText += 'Total score 34.1' + '\n';
-        } else {
-          num = 12*0.30*substats;
-          resultText += '(12)Skill: ' + num.toFixed(0) + '%\n';
-          num = 6*0.04*substats;
-          resultText += '(6)Regen: ' + num.toFixed(1) + '%\n';
-          num = 6*0.15*substats;
-          resultText += '(6)Health: ' + num.toFixed(1) + '%\n';
-          resultText += '\n' + 'Skill score 4.6' + '\n';
-          resultText += 'Survival score 2.4' + '\n';
-          resultText += 'Total score 11' + '\n';
-        }
-        break;
-      case 'Late Cursed':
-        num = 12*0.05*substats;
-        resultText += '(12)Block: ' + num.toFixed(0) + '%\n';
-        num = 12*0.07*substats;
-        resultText += '(12)Cooldown: ' + num.toFixed(1) + '%\n';
-        resultText += '\n' + 'Skill score 6.3' + '\n';
-        resultText += 'Survival score 2.5' + '\n';
-        resultText += 'Total score 15.8, RNG of 4' + '\n';
+        resultText += '\n' + 'DPS score 1.5' + '\n';
+        resultText += 'Skill score 4.1' + '\n';
+        resultText += 'Survival score 3.6' + '\n';
+        resultText += 'Total score 22.1' + '\n';
         break;
       default:
         resultText += 'Something went wrong';
