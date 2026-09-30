@@ -356,8 +356,8 @@
         resultText += '(3)Lifesteal: ' + num.toFixed(0) + '%\n';
         num = 3*0.30*substats;
         resultText += '(3)Skill: ' + num.toFixed(1) + '%\n';
-        num = num/15;
-        num = Math.min(80,20*num.toFixed(0));
+        num = Math.floor(num/15);
+        num = Math.min(80,20*num);
         resultText += '~ Crit Fairy gives Crit. Chance: ' + num.toFixed(0) + '%\n';
         num = 1*0.15*substats;
         resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
@@ -380,7 +380,7 @@
         num = 3*0.30*substats;
         resultText += '(3)Skill: ' + num.toFixed(1) + '%\n';
         num = num/15;
-        num = Math.min(80,20*num.toFixed(0));
+        num = Math.min(80,20*Math.floor(num));
         resultText += '~ Crit Fairy gives Crit. Chance: ' + num.toFixed(0) + '%\n';
         resultText += '\n' + 'DPS score 60' + '\n';
         resultText += 'Skill score 1.9' + '\n';
@@ -399,7 +399,7 @@
         num = 7*0.30*substats;
         resultText += '(6)Skill: ' + num.toFixed(1) + '%\n';
         num = num/15;
-        num = Math.min(80,20*num.toFixed(0));
+        num = Math.min(80,20*Math.floor(num));
         resultText += '~ Crit Fairy gives Crit. Chance: ' + num.toFixed(0) + '%\n';
         num = 1*0.15*substats;
         resultText += '(1)Damage: ' + num.toFixed(2) + '%\n';
@@ -421,7 +421,7 @@
         resultText += '(8)Health: ' + num.toFixed(0) + '%\n';
         num = 1*0.07*substats;
         resultText += '(1)Cooldown: ' + num.toFixed(2) + '%\n';
-        num = Math.min(30,5*num.toFixed(0));
+        num = Math.min(30,5*Math.floor(num));
         resultText += '~ Block Fairy gives Block Chance: ' + num.toFixed(0) + '%\n';
         resultText += '\n' + 'Skill score 1.9' + '\n';
         resultText += 'Survival score 23.3' + '\n';
@@ -435,7 +435,7 @@
         num = 3*0.15*substats;
         resultText += '(3)Health: ' + num.toFixed(2) + '%\n';
         num = num/10;
-        num = Math.min(30,15*num.toFixed(0));
+        num = Math.min(30,12*Math.floor(num));
         resultText += '~ Reflect Fairy gives Reflect Chance: ' + num.toFixed(0) + '%\n';
         num = 12*0.05*substats;
         resultText += '(12)Block: ' + num.toFixed(0) + '%\n';
