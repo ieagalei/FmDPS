@@ -350,7 +350,7 @@
         resultText += '(7)Crit. Damage: ' + num.toFixed(0) + '%\n';
         num = 6*0.40*substats;
         resultText += '(6)Attack Speed: ' + num.toFixed(0) + '%\n';
-        num = Math.min(100,);
+        num = Math.min(100,3*0.20*substats);
         resultText += '(3)Double Chance: ' + num.toFixed(0) + '%\n';
         num = 3*0.20*substats;
         resultText += '(3)Lifesteal: ' + num.toFixed(0) + '%\n';
@@ -385,7 +385,7 @@
         resultText += '\n' + 'DPS score 60' + '\n';
         resultText += 'Skill score 1.9' + '\n';
         resultText += 'Survival score 9.6' + '\n';
-        resultText += 'Total score 1094' + '\n';
+        resultText += 'Total score 1094, RNG of 2' + '\n';
         break;
       case 'Late Skill':
         num = 6*0.80*substats;
@@ -425,7 +425,7 @@
         resultText += '~ Block Fairy gives Block Chance: ' + num.toFixed(0) + '%\n';
         resultText += '\n' + 'Skill score 1.9' + '\n';
         resultText += 'Survival score 23.3' + '\n';
-        resultText += 'Total score 44.3' + '\n';
+        resultText += 'Total score 44.3, RNG of 7' + '\n';
         break;
       case 'Late Reflect':
         num = 6*0.30*substats;
@@ -442,7 +442,7 @@
         resultText += '\n' + 'DPS score 1.5' + '\n';
         resultText += 'Skill score 4.1' + '\n';
         resultText += 'Survival score 3.6' + '\n';
-        resultText += 'Total score 22.1' + '\n';
+        resultText += 'Total score 22.1, RNG of 28' + '\n';
         break;
       default:
         resultText += 'Something went wrong';
